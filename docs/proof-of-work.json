@@ -6,12 +6,12 @@
       "command": "python3 -m pytest -q -p no:cacheprovider --cov=sdd --cov-branch --cov-report=term-missing --cov-fail-under=100",
       "exit_code": 0,
       "expected_exit_code": 0,
-      "output_sha256": "4a4150a38dd9748407e11bf5488cd39e250c03ac1a715bc82ce6a3ac04cf843f",
-      "output_lines": 19,
-      "output": "............................................................................................ [ 62%]\n.......................................................                                      [100%]\n========================================== tests coverage ==========================================\n_________________________ coverage: platform linux, python 3.11.15-final-0 _________________________\n\nName                      Stmts   Miss Branch BrPart  Cover   Missing\n---------------------------------------------------------------------\nsrc/sdd/__init__.py           2      0      0      0   100%\nsrc/sdd/cli.py              128      0     32      0   100%\nsrc/sdd/dialects.py          33      0      0      0   100%\nsrc/sdd/differential.py     142      0     38      0   100%\nsrc/sdd/expressions.py      122      0     48      0   100%\nsrc/sdd/ordering.py          38      0     10      0   100%\nsrc/sdd/queries.py           47      0      4      0   100%\nsrc/sdd/table.py              8      0      0      0   100%\nsrc/sdd/values.py            54      0     22      0   100%\n---------------------------------------------------------------------\nTOTAL                       574      0    154      0   100%\nRequired test coverage of 100% reached. Total coverage: 100.00%",
+      "output_sha256": "f026dc9ce7d2657f5582211da283dd6ee4af2070fffe5143c03cc95a6e3c62b7",
+      "output_lines": 20,
+      "output": "............................................................................................ [ 48%]\n............................................................................................ [ 96%]\n.......                                                                                      [100%]\n========================================== tests coverage ==========================================\n_________________________ coverage: platform linux, python 3.11.15-final-0 _________________________\n\nName                      Stmts   Miss Branch BrPart  Cover   Missing\n---------------------------------------------------------------------\nsrc/sdd/__init__.py           2      0      0      0   100%\nsrc/sdd/cli.py              128      0     32      0   100%\nsrc/sdd/dialects.py          33      0      0      0   100%\nsrc/sdd/differential.py     142      0     38      0   100%\nsrc/sdd/expressions.py      122      0     48      0   100%\nsrc/sdd/ordering.py          38      0     10      0   100%\nsrc/sdd/queries.py           47      0      4      0   100%\nsrc/sdd/table.py              8      0      0      0   100%\nsrc/sdd/values.py            54      0     22      0   100%\n---------------------------------------------------------------------\nTOTAL                       574      0    154      0   100%\nRequired test coverage of 100% reached. Total coverage: 100.00%",
       "max_lines": 16,
       "tail_lines": 4,
-      "seconds": 0.85
+      "seconds": 2.37
     },
     {
       "label": "every query on every warehouse: a finding",
@@ -23,7 +23,7 @@
       "output": "warehouses          6\nqueries             11\nparse everywhere    11\nmean the same thing 1 (9.1%)\ndiverge             10 (90.9%)\nneed two decisions  1\nunattributable      0\nworst pair          oracle and postgres disagree on 8\n\nquery                            groups  explained by\n------------------------------------------------------------------------------\ntop-balances                          2  null_order_asc\nlargest-balances                      2  null_order_asc\ntop-balances-explicit-nulls           1  agrees everywhere\nsettled-ratio                         2  divide_by_zero, string_compare_case_sensitive\nhalf-balance                          2  integer_division\nratio-guarded                         2  integer_division\nnot-emea                              3  divide_by_zero, empty_string_is_null, concat_with_null_is_null, string_compare_case_sensitive\nregion-is-emea                        2  divide_by_zero, string_compare_case_sensitive\nblank-region                          2  empty_string_is_null, concat_with_null_is_null\nregion-is-null                        2  empty_string_is_null, concat_with_null_is_null\nlabel                                 2  empty_string_is_null, concat_with_null_is_null",
       "max_lines": 22,
       "tail_lines": 0,
-      "seconds": 0.06
+      "seconds": 0.05
     },
     {
       "label": "the migration nobody worries about, which is the one that is safe",
@@ -107,7 +107,7 @@
       "output": "number check passed: 17 metrics verified against 5 documents, forwards, per document and backwards",
       "max_lines": 3,
       "tail_lines": 0,
-      "seconds": 0.04
+      "seconds": 0.05
     }
   ]
 }

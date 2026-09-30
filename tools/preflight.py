@@ -137,7 +137,7 @@ def check_exit_codes(problems: list[str]) -> None:
                 f"srd {' '.join(argv)} exited {result.returncode}, expected {expected}"
             )
         else:
-            print(f"  srd {' '.join(argv)} -> {expected}")
+            print(f"  sdd {' '.join(argv)} -> {expected}")
 
 
 def check_determinism(problems: list[str]) -> None:
