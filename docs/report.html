@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL dialect drift report</title>
+<style>
+:root { --surface:#fcfcfb; --ink:#1d1d1b; --muted:#6b6b66; --rule:#d9d9d4;
+        --blue:#2a78d6; --orange:#eb6834; --green:#1baf7a; }
+* { box-sizing: border-box; }
+body { margin:0 auto; padding:48px 24px 96px; max-width:920px; background:var(--surface);
+       color:var(--ink); line-height:1.55;
+       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; }
+h1 { font-size:30px; margin:0 0 8px; letter-spacing:-0.01em; }
+h2 { font-size:20px; margin:48px 0 12px; padding-top:18px; border-top:1px solid var(--rule); }
+p { margin:0 0 14px; }
+.lede { color:var(--muted); font-size:15px; margin-bottom:28px; }
+.verdict { display:inline-block; padding:6px 14px; border-radius:999px; font-weight:600;
+           font-size:13px; color:#ffffff; background:var(--orange); }
+.figures { display:flex; flex-wrap:wrap; gap:16px; margin:24px 0 8px; }
+.figure { flex:1 1 190px; border:1px solid var(--rule); border-radius:10px; padding:16px 18px;
+          background:#ffffff; }
+.figure .value { font-size:28px; font-weight:600; letter-spacing:-0.02em; }
+.figure .label { font-size:12px; color:var(--muted); margin-top:4px; }
+table { border-collapse:collapse; width:100%; margin:16px 0; font-size:14px; }
+th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--rule); }
+th { font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;
+     color:var(--muted); }
+td.num { text-align:right; font-variant-numeric:tabular-nums; }
+code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; }
+.note { font-size:13px; color:var(--muted); }
+.agree { color:var(--green); font-weight:600; }
+</style></head><body>
+<h1>Does this query mean the same thing after the migration?</h1>
+<p class="lede">Eleven queries a person would write without thinking twice, run against a model of six warehouses. Every figure below is produced by running the code in this repository.</p>
+<p><span class="verdict">no: most of them do not</span></p>
+<h2 id="summary">Summary</h2>
+<div class="figures">
+<div class="figure"><div class="value">90.9%</div><div class="label">of the suite means different things</div></div>
+<div class="figure"><div class="value">11</div><div class="label">queries, all of which parse everywhere</div></div>
+<div class="figure"><div class="value">1</div><div class="label">queries survive unchanged</div></div>
+<div class="figure"><div class="value">4</div><div class="label">decisions no query can separate</div></div>
+</div>
+<p class="note">A transpiler handed any of these queries returns valid target SQL and reports success. The only query that means the same thing on every warehouse is the one that writes its NULL ordering out.</p>
+<h2 id="queries">Every query</h2>
+<table><thead><tr><th>query</th><th>SQL</th><th>answers</th><th>explained by</th></tr></thead><tbody>
+<tr><td><code>top-balances</code></td><td><code>SELECT account FROM ledger ORDER BY balance_cents, account LIMIT 3</code></td><td class="num">2</td><td>null_order_asc</td></tr>
+<tr><td><code>largest-balances</code></td><td><code>SELECT account FROM ledger ORDER BY balance_cents DESC, account LIMIT 3</code></td><td class="num">2</td><td>null_order_asc</td></tr>
+<tr><td><code>top-balances-explicit-nulls</code></td><td><code>SELECT account FROM ledger ORDER BY balance_cents NULLS LAST, account LIMIT 3</code></td><td class="num">1</td><td><span class="agree">agrees everywhere</span></td></tr>
+<tr><td><code>settled-ratio</code></td><td><code>SELECT balance_cents / settled_cents FROM ledger</code></td><td class="num">2</td><td>divide_by_zero, string_compare_case_sensitive</td></tr>
+<tr><td><code>half-balance</code></td><td><code>SELECT balance_cents / 2 FROM ledger</code></td><td class="num">2</td><td>integer_division</td></tr>
+<tr><td><code>ratio-guarded</code></td><td><code>SELECT balance_cents / NULLIF(settled_cents, 0) FROM ledger</code></td><td class="num">2</td><td>integer_division</td></tr>
+<tr><td><code>not-emea</code></td><td><code>SELECT account FROM ledger WHERE region &lt;&gt; &#x27;emea&#x27;</code></td><td class="num">3</td><td>divide_by_zero, empty_string_is_null, concat_with_null_is_null, string_compare_case_sensitive</td></tr>
+<tr><td><code>region-is-emea</code></td><td><code>SELECT account FROM ledger WHERE region = &#x27;emea&#x27;</code></td><td class="num">2</td><td>divide_by_zero, string_compare_case_sensitive</td></tr>
+<tr><td><code>blank-region</code></td><td><code>SELECT account FROM ledger WHERE region = &#x27;&#x27;</code></td><td class="num">2</td><td>empty_string_is_null, concat_with_null_is_null</td></tr>
+<tr><td><code>region-is-null</code></td><td><code>SELECT account FROM ledger WHERE region IS NULL</code></td><td class="num">2</td><td>empty_string_is_null, concat_with_null_is_null</td></tr>
+<tr><td><code>label</code></td><td><code>SELECT account || &#x27; &#x27; || note FROM ledger</code></td><td class="num">2</td><td>empty_string_is_null, concat_with_null_is_null</td></tr>
+</tbody></table>
+<h2 id="pairs">Every migration</h2>
+<p>Nobody migrates to six warehouses. The number a plan wants is the one for its own pair.</p>
+<table><thead><tr><th>from</th><th>to</th><th>queries that disagree</th></tr></thead><tbody>
+<tr><td>oracle</td><td>postgres</td><td class="num">8</td></tr>
+<tr><td>oracle</td><td>redshift</td><td class="num">8</td></tr>
+<tr><td>mysql</td><td>postgres</td><td class="num">7</td></tr>
+<tr><td>mysql</td><td>redshift</td><td class="num">7</td></tr>
+<tr><td>mysql</td><td>oracle</td><td class="num">6</td></tr>
+<tr><td>oracle</td><td>snowflake</td><td class="num">6</td></tr>
+<tr><td>mysql</td><td>snowflake</td><td class="num">5</td></tr>
+<tr><td>bigquery</td><td>oracle</td><td class="num">4</td></tr>
+<tr><td>bigquery</td><td>postgres</td><td class="num">4</td></tr>
+<tr><td>bigquery</td><td>redshift</td><td class="num">4</td></tr>
+<tr><td>bigquery</td><td>mysql</td><td class="num">3</td></tr>
+<tr><td>bigquery</td><td>snowflake</td><td class="num">2</td></tr>
+<tr><td>postgres</td><td>snowflake</td><td class="num">2</td></tr>
+<tr><td>redshift</td><td>snowflake</td><td class="num">2</td></tr>
+<tr><td>postgres</td><td>redshift</td><td class="num">0</td></tr>
+</tbody></table>
+<p class="note">The worst pair, postgres to oracle, disagree on 8. The safest, postgres to redshift, disagree on 0, and it is the migration nobody worries about.</p>
+<h2 id="blind">What the model cannot see</h2>
+<p>Remove one decision from the model and re-run. A decision with no confounded partner leaves queries unexplained, which is the tool correctly saying it no longer understands them. A decision with a partner leaves nothing unexplained, because the partner absorbs its work.</p>
+<table><thead><tr><th>decision removed</th><th>queries it can no longer explain</th></tr></thead><tbody>
+<tr><td><code>null_order_asc</code></td><td class="num">2</td></tr>
+<tr><td><code>integer_division</code></td><td class="num">2</td></tr>
+<tr><td><code>divide_by_zero</code></td><td class="num">0</td></tr>
+<tr><td><code>string_compare_case_sensitive</code></td><td class="num">0</td></tr>
+<tr><td><code>empty_string_is_null</code></td><td class="num">0</td></tr>
+<tr><td><code>concat_with_null_is_null</code></td><td class="num">0</td></tr>
+</tbody></table>
+<p class="note">So a model with confounded decisions cannot detect that it is missing one of them. Its apparent completeness is not evidence of completeness.</p>
+</body></html>

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sql-dialect-drift"
+version = "0.1.0"
+description = "A transpiler that returns valid target SQL has proved syntax, not semantics. This measures the gap."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov>=5", "coverage>=7", "playwright>=1.40", "cmarkgfm>=2024.1.14"]
+
+[project.scripts]
+sdd = "sdd.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+branch = true
+source = ["src/sdd"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:"]

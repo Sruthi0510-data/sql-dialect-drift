@@ -1,0 +1,145 @@
+{
+  "warehouses": 6,
+  "queries": 11,
+  "parse_everywhere": 11,
+  "diverging": 10,
+  "divergence_share": 0.9090909090909091,
+  "agreeing": 1,
+  "needing_two_decisions": 1,
+  "unattributed": 0,
+  "confounded_groups": [
+    [
+      "divide_by_zero",
+      "string_compare_case_sensitive"
+    ],
+    [
+      "empty_string_is_null",
+      "concat_with_null_is_null"
+    ]
+  ],
+  "confounded_axis_count": 4,
+  "axis_counts": {
+    "null_order_asc": 2,
+    "integer_division": 2,
+    "divide_by_zero": 3,
+    "string_compare_case_sensitive": 3,
+    "empty_string_is_null": 4,
+    "concat_with_null_is_null": 4
+  },
+  "worst_pair": [
+    "postgres",
+    "oracle",
+    8
+  ],
+  "safest_pair": [
+    "postgres",
+    "redshift",
+    0
+  ],
+  "pairs": [
+    {
+      "left": "oracle",
+      "right": "postgres",
+      "diverging": 8,
+      "queries": 11
+    },
+    {
+      "left": "oracle",
+      "right": "redshift",
+      "diverging": 8,
+      "queries": 11
+    },
+    {
+      "left": "mysql",
+      "right": "postgres",
+      "diverging": 7,
+      "queries": 11
+    },
+    {
+      "left": "mysql",
+      "right": "redshift",
+      "diverging": 7,
+      "queries": 11
+    },
+    {
+      "left": "mysql",
+      "right": "oracle",
+      "diverging": 6,
+      "queries": 11
+    },
+    {
+      "left": "oracle",
+      "right": "snowflake",
+      "diverging": 6,
+      "queries": 11
+    },
+    {
+      "left": "mysql",
+      "right": "snowflake",
+      "diverging": 5,
+      "queries": 11
+    },
+    {
+      "left": "bigquery",
+      "right": "oracle",
+      "diverging": 4,
+      "queries": 11
+    },
+    {
+      "left": "bigquery",
+      "right": "postgres",
+      "diverging": 4,
+      "queries": 11
+    },
+    {
+      "left": "bigquery",
+      "right": "redshift",
+      "diverging": 4,
+      "queries": 11
+    },
+    {
+      "left": "bigquery",
+      "right": "mysql",
+      "diverging": 3,
+      "queries": 11
+    },
+    {
+      "left": "bigquery",
+      "right": "snowflake",
+      "diverging": 2,
+      "queries": 11
+    },
+    {
+      "left": "postgres",
+      "right": "snowflake",
+      "diverging": 2,
+      "queries": 11
+    },
+    {
+      "left": "redshift",
+      "right": "snowflake",
+      "diverging": 2,
+      "queries": 11
+    },
+    {
+      "left": "postgres",
+      "right": "redshift",
+      "diverging": 0,
+      "queries": 11
+    }
+  ],
+  "pairs_with_no_divergence": 1,
+  "pair_count": 15,
+  "fix_groups": 1,
+  "unfixed_groups": 2,
+  "queries_unattributed_when_blinded": {
+    "null_order_asc": 2,
+    "integer_division": 2,
+    "divide_by_zero": 0,
+    "string_compare_case_sensitive": 0,
+    "empty_string_is_null": 0,
+    "concat_with_null_is_null": 0
+  },
+  "worst_blind_spot": "null_order_asc",
+  "worst_blind_spot_count": 2
+}

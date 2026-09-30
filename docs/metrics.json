@@ -1,0 +1,115 @@
+{
+  "anchors": {
+    "agreeing": [
+      "{} query survives"
+    ],
+    "confounded_axis_count": [
+      "{} of the six decisions"
+    ],
+    "coverage_branch_pct": [
+      "{}% branch"
+    ],
+    "coverage_line_pct": [
+      "{}% line"
+    ],
+    "divergence_pct": [
+      "{}% of the suite"
+    ],
+    "diverging": [
+      "{} of them mean"
+    ],
+    "fix_groups": [
+      "goes to {} answer"
+    ],
+    "needing_two_decisions": [
+      "{} query needs two"
+    ],
+    "pairs_with_no_divergence": [
+      "{} of the fifteen pairs"
+    ],
+    "queries": [
+      "{} queries a person"
+    ],
+    "safest_pair_count": [
+      "pairs disagree on {} of"
+    ],
+    "tests_total": [
+      "{} tests,"
+    ],
+    "unattributed": [
+      "leaves {} unattributable"
+    ],
+    "unfixed_groups": [
+      "from {} answers"
+    ],
+    "warehouses": [
+      "{} warehouses"
+    ],
+    "worst_blind_spot_count": [
+      "only {} of them become"
+    ],
+    "worst_pair_count": [
+      "worst pair disagree on {}"
+    ]
+  },
+  "checked_documents": [
+    "README.md",
+    "docs/adr/ADR-001-null-is-a-third-thing.md",
+    "docs/adr/ADR-002-attribution-refuses-to-guess.md",
+    "docs/adr/ADR-003-what-this-repository-cannot-measure.md"
+  ],
+  "metrics": {
+    "agreeing": 1,
+    "confounded_axis_count": 4,
+    "coverage_branch_pct": 100.0,
+    "coverage_line_pct": 100.0,
+    "divergence_pct": 90.9,
+    "diverging": 10,
+    "fix_groups": 1,
+    "needing_two_decisions": 1,
+    "pairs_with_no_divergence": 1,
+    "queries": 11,
+    "safest_pair_count": 0,
+    "tests_total": 147,
+    "unattributed": 0,
+    "unfixed_groups": 2,
+    "warehouses": 6,
+    "worst_blind_spot_count": 2,
+    "worst_pair_count": 8
+  },
+  "note": "every value here is produced by running the suite and the experiment; tools/check_numbers.py fails the build when a document quotes a figure the code no longer produces",
+  "table_values": [
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    3,
+    2,
+    2,
+    2,
+    2,
+    8,
+    8,
+    7,
+    7,
+    6,
+    6,
+    5,
+    4,
+    4,
+    4,
+    3,
+    2,
+    2,
+    2,
+    0,
+    2,
+    2,
+    0,
+    0,
+    0,
+    0
+  ]
+}

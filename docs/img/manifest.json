@@ -1,0 +1,32 @@
+{
+  "shots": [
+    {
+      "image": "docs/img/report-summary.png",
+      "source": "docs/report.html",
+      "framed_from": "summary",
+      "framed_to": "pairs",
+      "height_px": 1124
+    },
+    {
+      "image": "docs/img/report-pairs.png",
+      "source": "docs/report.html",
+      "framed_from": "pairs",
+      "framed_to": "blind",
+      "height_px": 803
+    },
+    {
+      "image": "docs/img/report-blind.png",
+      "source": "docs/report.html",
+      "framed_from": "blind",
+      "framed_to": null,
+      "height_px": 594
+    }
+  ],
+  "badge": {
+    "colour": "rgb(255, 255, 255)",
+    "background": "rgb(235, 104, 52)",
+    "text": "no: most of them do not",
+    "visible": true
+  },
+  "note": "captured from the report the tool generates, framed by heading id, with the verdict badge contrast read back from the rendered page"
+}

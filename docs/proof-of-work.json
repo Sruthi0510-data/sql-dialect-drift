@@ -1,0 +1,113 @@
+{
+  "note": "every command below was executed by tools/capture_terminal.py; exit codes are as returned, and elapsed times and absolute paths are normalised so the committed transcript does not change on every run",
+  "captures": [
+    {
+      "label": "the suite, with branch coverage",
+      "command": "python3 -m pytest -q -p no:cacheprovider --cov=sdd --cov-branch --cov-report=term-missing --cov-fail-under=100",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "output_sha256": "4a4150a38dd9748407e11bf5488cd39e250c03ac1a715bc82ce6a3ac04cf843f",
+      "output_lines": 19,
+      "output": "............................................................................................ [ 62%]\n.......................................................                                      [100%]\n========================================== tests coverage ==========================================\n_________________________ coverage: platform linux, python 3.11.15-final-0 _________________________\n\nName                      Stmts   Miss Branch BrPart  Cover   Missing\n---------------------------------------------------------------------\nsrc/sdd/__init__.py           2      0      0      0   100%\nsrc/sdd/cli.py              128      0     32      0   100%\nsrc/sdd/dialects.py          33      0      0      0   100%\nsrc/sdd/differential.py     142      0     38      0   100%\nsrc/sdd/expressions.py      122      0     48      0   100%\nsrc/sdd/ordering.py          38      0     10      0   100%\nsrc/sdd/queries.py           47      0      4      0   100%\nsrc/sdd/table.py              8      0      0      0   100%\nsrc/sdd/values.py            54      0     22      0   100%\n---------------------------------------------------------------------\nTOTAL                       574      0    154      0   100%\nRequired test coverage of 100% reached. Total coverage: 100.00%",
+      "max_lines": 16,
+      "tail_lines": 4,
+      "seconds": 0.85
+    },
+    {
+      "label": "every query on every warehouse: a finding",
+      "command": "python3 -m sdd.cli check",
+      "exit_code": 3,
+      "expected_exit_code": 3,
+      "output_sha256": "2b154a99d6798cfbac56149292952abad76d76e05393be959d536d77943e346f",
+      "output_lines": 22,
+      "output": "warehouses          6\nqueries             11\nparse everywhere    11\nmean the same thing 1 (9.1%)\ndiverge             10 (90.9%)\nneed two decisions  1\nunattributable      0\nworst pair          oracle and postgres disagree on 8\n\nquery                            groups  explained by\n------------------------------------------------------------------------------\ntop-balances                          2  null_order_asc\nlargest-balances                      2  null_order_asc\ntop-balances-explicit-nulls           1  agrees everywhere\nsettled-ratio                         2  divide_by_zero, string_compare_case_sensitive\nhalf-balance                          2  integer_division\nratio-guarded                         2  integer_division\nnot-emea                              3  divide_by_zero, empty_string_is_null, concat_with_null_is_null, string_compare_case_sensitive\nregion-is-emea                        2  divide_by_zero, string_compare_case_sensitive\nblank-region                          2  empty_string_is_null, concat_with_null_is_null\nregion-is-null                        2  empty_string_is_null, concat_with_null_is_null\nlabel                                 2  empty_string_is_null, concat_with_null_is_null",
+      "max_lines": 22,
+      "tail_lines": 0,
+      "seconds": 0.06
+    },
+    {
+      "label": "the migration nobody worries about, which is the one that is safe",
+      "command": "python3 -m sdd.cli check --dialect postgres --dialect redshift",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "output_sha256": "345b82624b46ecf59d8ef78ce77d2190cd614d76ebc4ad1c6a4e53993ad67453",
+      "output_lines": 22,
+      "output": "warehouses          2\nqueries             11\nparse everywhere    11\nmean the same thing 11 (100.0%)\ndiverge             0 (0.0%)\nneed two decisions  0\nunattributable      0\nworst pair          postgres and redshift disagree on 0\n\nquery                            groups  explained by\n------------------------------------------------------------------------------\ntop-balances                          1  agrees everywhere\nlargest-balances                      1  agrees everywhere\ntop-balances-explicit-nulls           1  agrees everywhere\nsettled-ratio                         1  agrees everywhere\nhalf-balance                          1  agrees everywhere\nratio-guarded                         1  agrees everywhere\nnot-emea                              1  agrees everywhere\nregion-is-emea                        1  agrees everywhere\nblank-region                          1  agrees everywhere\nregion-is-null                        1  agrees everywhere\nlabel                                 1  agrees everywhere",
+      "max_lines": 9,
+      "tail_lines": 0,
+      "seconds": 0.05
+    },
+    {
+      "label": "one query, every answer, and the decision behind the split",
+      "command": "python3 -m sdd.cli explain top-balances",
+      "exit_code": 3,
+      "expected_exit_code": 3,
+      "output_sha256": "c3408a07259aa6ae8a7cc35ecffe97326f0aec5f5e7ee9c542fcc3bb5e22323e",
+      "output_lines": 15,
+      "output": "SELECT account FROM ledger ORDER BY balance_cents, account LIMIT 3\n\nwhy it is in the suite: the first page of a ranking, which is what a report shows and a downstream job takes the head of\n\n  bigquery     'acct-02', 'acct-03', 'acct-05'\n  mysql        'acct-02', 'acct-03', 'acct-05'\n  oracle       'acct-02', 'acct-03', 'acct-05'\n  postgres     'acct-05', 'acct-12', 'acct-11'\n  redshift     'acct-05', 'acct-12', 'acct-11'\n  snowflake    'acct-05', 'acct-12', 'acct-11'\n\nthe answers split the warehouses 2 ways:\n  bigquery, mysql, oracle\n  postgres, redshift, snowflake\nexplained by: null_order_asc",
+      "max_lines": 17,
+      "tail_lines": 0,
+      "seconds": 0.05
+    },
+    {
+      "label": "the same query with its NULL ordering written out",
+      "command": "python3 -m sdd.cli explain top-balances-explicit-nulls",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "output_sha256": "ea8f09f283c95428a4f804f34393023d7f8cfd7e48e7eb52495fbd7fca6e57df",
+      "output_lines": 12,
+      "output": "SELECT account FROM ledger ORDER BY balance_cents NULLS LAST, account LIMIT 3\n\nwhy it is in the suite: the fix, written out, so the repository can price it: one clause, and the divergence is gone\n\n  bigquery     'acct-05', 'acct-12', 'acct-11'\n  mysql        'acct-05', 'acct-12', 'acct-11'\n  oracle       'acct-05', 'acct-12', 'acct-11'\n  postgres     'acct-05', 'acct-12', 'acct-11'\n  redshift     'acct-05', 'acct-12', 'acct-11'\n  snowflake    'acct-05', 'acct-12', 'acct-11'\n\nevery warehouse asked returns the same answer",
+      "max_lines": 13,
+      "tail_lines": 2,
+      "seconds": 0.05
+    },
+    {
+      "label": "decisions these six warehouses cannot separate",
+      "command": "python3 -m sdd.cli confounded",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "output_sha256": "1b9e6abe68aa6a2efe1166a5d1752819f0535646cc36bda242e5056c1fd27879",
+      "output_lines": 6,
+      "output": "decisions no query on these warehouses can tell apart:\n  divide_by_zero, string_compare_case_sensitive\n  empty_string_is_null, concat_with_null_is_null\n\nthis is a property of the warehouses chosen, not of SQL. adding a\nwarehouse that differs on one and not the other separates them.",
+      "max_lines": 8,
+      "tail_lines": 0,
+      "seconds": 0.06
+    },
+    {
+      "label": "the tool with one decision removed from its model: a refusal",
+      "command": "python3 -m sdd.cli check --blind null_order_asc",
+      "exit_code": 4,
+      "expected_exit_code": 4,
+      "output_sha256": "8e7700bb0f0c72696657a178cdbfba9c1ac8688c1f3cdc97128561fd718e0cba",
+      "output_lines": 22,
+      "output": "warehouses          6\nqueries             11\nparse everywhere    11\nmean the same thing 1 (9.1%)\ndiverge             10 (90.9%)\nneed two decisions  1\nunattributable      2\nworst pair          oracle and postgres disagree on 8\n\nquery                            groups  explained by\n------------------------------------------------------------------------------\ntop-balances                          2  \nlargest-balances                      2  \ntop-balances-explicit-nulls           1  agrees everywhere\nsettled-ratio                         2  divide_by_zero, string_compare_case_sensitive\nhalf-balance                          2  integer_division\nratio-guarded                         2  integer_division\nnot-emea                              3  divide_by_zero, empty_string_is_null, concat_with_null_is_null, string_compare_case_sensitive\nregion-is-emea                        2  divide_by_zero, string_compare_case_sensitive\nblank-region                          2  empty_string_is_null, concat_with_null_is_null\nregion-is-null                        2  empty_string_is_null, concat_with_null_is_null\nlabel                                 2  empty_string_is_null, concat_with_null_is_null",
+      "max_lines": 10,
+      "tail_lines": 0,
+      "seconds": 0.06
+    },
+    {
+      "label": "a warehouse this repository does not model",
+      "command": "python3 -m sdd.cli check --dialect duckdb",
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "output_sha256": "3cfa8de8ced013330b3bad35a278ada413dc5440f0bb07aa8d0ed274a87c8b7c",
+      "output_lines": 1,
+      "output": "'no such dialect: duckdb; available: bigquery, mysql, oracle, postgres, redshift, snowflake'",
+      "max_lines": 3,
+      "tail_lines": 0,
+      "seconds": 0.05
+    },
+    {
+      "label": "every published figure re-checked against the prose",
+      "command": "python3 tools/check_numbers.py",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "output_sha256": "1cf392c5e4f313e2d706e1b8b5ae874efe8af74d3b58998bacb65a033fb462b2",
+      "output_lines": 1,
+      "output": "number check passed: 17 metrics verified against 5 documents, forwards, per document and backwards",
+      "max_lines": 3,
+      "tail_lines": 0,
+      "seconds": 0.04
+    }
+  ]
+}
