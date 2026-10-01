@@ -1,5 +1,7 @@
 # sql-dialect-drift
 
+[![ci](https://github.com/Sruthi0510-data/sql-dialect-drift/actions/workflows/ci.yml/badge.svg)](https://github.com/Sruthi0510-data/sql-dialect-drift/actions/workflows/ci.yml)
+
 A transpiler takes a query written for one warehouse and returns a query the
 target warehouse accepts. Acceptance is what it can check. Acceptance is not
 what anybody wanted.
@@ -174,6 +176,8 @@ Everything is offline and deterministic. No warehouse connection, no
 credentials, no network at runtime.
 
 ```bash
+git clone https://github.com/Sruthi0510-data/sql-dialect-drift.git
+cd sql-dialect-drift
 python3 -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
 make verify
