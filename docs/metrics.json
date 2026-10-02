@@ -58,6 +58,7 @@
     "docs/adr/ADR-002-attribution-refuses-to-guess.md",
     "docs/adr/ADR-003-what-this-repository-cannot-measure.md"
   ],
+  "measured_despite_a_red_suite": false,
   "metrics": {
     "agreeing": 1,
     "confounded_axis_count": 4,
