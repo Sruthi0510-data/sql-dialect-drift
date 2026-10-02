@@ -12,8 +12,9 @@ repository is the set of trees for which it does.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping, Protocol
+from typing import Protocol
 
 from sdd.dialects import Dialect, DivideByZero
 from sdd.values import NULL, SqlTypeError, Truth, Value, is_null, truth_of, type_name
@@ -54,7 +55,7 @@ class Expression(Protocol):
 class Literal:
     value: Value
 
-    def evaluate(self, row: Row, dialect: Dialect) -> Value:
+    def evaluate(self, row: Row, dialect: Dialect) -> Value:  # noqa: ARG002 - Expression protocol
         """Read a literal, applying the dialect's view of the empty string.
 
         Oracle stores the empty string as NULL, which means a literal '' in a

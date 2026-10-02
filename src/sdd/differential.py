@@ -26,9 +26,9 @@ one and watch it say so.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import combinations
-from typing import Sequence
 
 from sdd.dialects import DIALECTS, DIVERGENCE_AXES, Dialect
 from sdd.expressions import DivisionByZero
@@ -157,7 +157,7 @@ class Report:
         return tuple(result for result in self.results if result.needs_two_axes)
 
     def axis_counts(self) -> dict[str, int]:
-        counts = {axis: 0 for axis in self.axes}
+        counts = dict.fromkeys(self.axes, 0)
         for result in self.diverging:
             for axis in result.explained_by or result.jointly_explained_by:
                 counts[axis] += 1

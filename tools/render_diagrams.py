@@ -84,7 +84,7 @@ def how_a_query_splits(metrics: dict) -> str:
             colour,
             f"NULLs sort {DIALECTS[names[0]].null_order_asc.value}",
         )
-        for (rendered, names), colour in zip(ordered, (BLUE, ORANGE))
+        for (rendered, names), colour in zip(ordered, (BLUE, ORANGE), strict=True)
     ]
 
     for index, (names, answer, colour, label) in enumerate(panels):

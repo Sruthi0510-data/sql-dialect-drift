@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from sdd.dialects import NullOrder, dialect
-from sdd.expressions import Column, Literal
+from sdd.expressions import Column
 from sdd.ordering import SortKey, order_rows, sort_positions
 from sdd.queries import SUITE, UnknownQueryError, query
 from sdd.values import NULL, SqlTypeError

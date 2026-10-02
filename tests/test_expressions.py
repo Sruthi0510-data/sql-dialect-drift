@@ -12,8 +12,8 @@ from sdd.expressions import (
     DivisionByZero,
     IsNull,
     Literal,
-    NullIf,
     Not,
+    NullIf,
     evaluate,
 )
 from sdd.values import NULL, SqlTypeError

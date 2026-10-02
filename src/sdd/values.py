@@ -17,9 +17,7 @@ UNKNOWN and rejects only FALSE. Collapsing them hides half the divergences.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import Enum
-from typing import Union
 
 __all__ = [
     "NULL",
@@ -50,9 +48,9 @@ class NullType:
     answer. Making the wrong idiom fail loudly is worth one class.
     """
 
-    _instance: "NullType | None" = None
+    _instance: NullType | None = None
 
-    def __new__(cls) -> "NullType":
+    def __new__(cls) -> NullType:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
@@ -66,7 +64,7 @@ class NullType:
 
 NULL = NullType()
 
-Value = Union[int, float, str, bool, NullType]
+Value = int | float | str | bool | NullType
 
 
 class Truth(Enum):
@@ -90,7 +88,7 @@ class Truth(Enum):
     def passes_constraint(self) -> bool:
         return self is not Truth.FALSE
 
-    def negate(self) -> "Truth":
+    def negate(self) -> Truth:
         if self is Truth.TRUE:
             return Truth.FALSE
         if self is Truth.FALSE:

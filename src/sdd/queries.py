@@ -20,13 +20,13 @@ diverges, and that is worth failing a build over.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from sdd.dialects import Dialect, NullOrder
 from sdd.expressions import Binary, Column, Concat, Expression, IsNull, Literal, NullIf, Row
 from sdd.ordering import SortKey, order_rows
-from sdd.values import NULL, Value, truth_of
+from sdd.values import Value, truth_of
 
 __all__ = ["Query", "Project", "Filter", "Ordered", "SUITE", "query", "UnknownQueryError"]
 

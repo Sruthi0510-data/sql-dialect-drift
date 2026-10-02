@@ -16,8 +16,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from sdd.dialects import DIALECTS, DIVERGENCE_AXES, UnknownDialectError, dialect
 from sdd.differential import Report, run_query, run_suite

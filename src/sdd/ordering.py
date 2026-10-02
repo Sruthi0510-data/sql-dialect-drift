@@ -13,8 +13,8 @@ ten customers who have never ordered on another, with no error anywhere.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from sdd.dialects import Dialect, NullOrder
 from sdd.expressions import Expression, Row
@@ -104,4 +104,4 @@ def sort_positions(
     Comparing whole rows would report a divergence whenever a row carries a
     column nobody selected, so the comparison is over the projected column only.
     """
-    return tuple(row[column] if column in row else NULL for row in order_rows(rows, keys, dialect))
+    return tuple(row.get(column, NULL) for row in order_rows(rows, keys, dialect))

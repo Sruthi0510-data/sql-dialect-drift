@@ -49,4 +49,4 @@ ROWS: tuple[tuple[Any, ...], ...] = (
 
 
 def rows_as_dicts() -> tuple[dict[str, Value], ...]:
-    return tuple(dict(zip(COLUMNS, row)) for row in ROWS)
+    return tuple(dict(zip(COLUMNS, row, strict=True)) for row in ROWS)

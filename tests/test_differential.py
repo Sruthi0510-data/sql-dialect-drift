@@ -17,7 +17,7 @@ from sdd.differential import (
     run_query,
     run_suite,
 )
-from sdd.expressions import Binary, Column, Literal
+from sdd.expressions import Binary, Literal
 from sdd.queries import SUITE, Project, query
 from sdd.values import NULL
 
